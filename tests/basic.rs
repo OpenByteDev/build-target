@@ -25,7 +25,7 @@ fn x86_64_unknown_linux_musl() -> Result<(), Box<dyn Error>> {
 static TEST_CRATE_NAME: &str = "test-crate";
 
 fn test_target(target: &str, arch: Arch, env: Env, family: Family, os: Os) -> Result<(), Box<dyn Error>> {
-    let crate_path = PathBuf::from_str(".\\tests")?.join(TEST_CRATE_NAME).canonicalize()?;
+    let crate_path = PathBuf::from_str("./tests")?.join(TEST_CRATE_NAME).canonicalize()?;
 
     format_struct_into_test_data_file(arch, "arch");
     format_struct_into_test_data_file(env, "env");
@@ -43,5 +43,5 @@ fn test_target(target: &str, arch: Arch, env: Env, family: Family, os: Os) -> Re
 }
 
 fn format_struct_into_test_data_file(obj: impl fmt::Debug, file_name: &str) {
-    fs::write(dbg!(format!("tests/test_data/{}.txt", file_name)), format!("{:#?}", obj)).unwrap()
+    fs::write(format!("tests/test_data/{}.txt", file_name), format!("{:#?}", obj)).unwrap()
 }
