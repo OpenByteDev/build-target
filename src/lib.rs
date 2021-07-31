@@ -9,3 +9,6 @@ pub use os::*;
 
 mod family;
 pub use family::*;
+
+mod triple;
+pub use triple::*;

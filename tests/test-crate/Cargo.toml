@@ -5,3 +5,4 @@ edition = "2018"
 
 [build-dependencies]
 build-target = { path = "../.." }
+velcro = "0.5"
