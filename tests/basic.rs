@@ -50,5 +50,5 @@ fn test_target(target: &str, arch: Arch, env: Env, family: Family, os: Os) -> Re
 }
 
 fn format_struct_into_test_data_file(obj: impl fmt::Debug, file_name: &str) {
-    fs::write(format!("tests/test_data/{}.txt", file_name), format!("{:#?}", obj)).unwrap()
+    fs::write(format!("./tests/test_data/{}.txt", file_name), format!("{:#?}", obj)).unwrap()
 }
