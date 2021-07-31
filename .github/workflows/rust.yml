@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix: 
-        target: ["i686-pc-windows-msvc", "i686-pc-windows-gnu", "x86_64-pc-windows-msvc", "x86_64-pc-windows-gnu", "x86_64-unknown-linux-gnu", "x86_64-unknown-linux-musl"]
+        target: ["i686-pc-windows-gnu", "x86_64-pc-windows-gnu", "x86_64-unknown-linux-gnu", "x86_64-unknown-linux-musl"]
     steps:
     - uses: actions/checkout@v2
     - name: Install toolchain
@@ -24,9 +24,13 @@ jobs:
           toolchain: stable
           target: ${{ matrix.target }}
           override: true
-    - name: Install msvc
-      run: sudo apt install mingw-w64
-    - name: Build
-      run: cargo build --target ${{ matrix.target }} --verbose
-    - name: Run tests
-      run: cargo test --target ${{ matrix.target }} --verbose
+    - uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --target ${{ matrix.target }} --verbose
+    - uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: test
+          args: --target ${{ matrix.target }} --verbose
