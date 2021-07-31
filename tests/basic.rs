@@ -34,10 +34,10 @@ fn test_target(target: &str, arch: Arch, env: Env, family: Family, os: Os) -> Re
 
     let crate_path = PathBuf::from_str("./tests")?.join(TEST_CRATE_NAME).canonicalize()?;
 
-    format_struct_into_test_data_file(arch, "arch");
-    format_struct_into_test_data_file(env, "env");
-    format_struct_into_test_data_file(family, "family");
-    format_struct_into_test_data_file(os, "os");
+    format_struct_into_test_data_file(arch, "arch")?;
+    format_struct_into_test_data_file(env, "env")?;
+    format_struct_into_test_data_file(family, "family")?;
+    format_struct_into_test_data_file(os, "os")?;
 
     Command::new("cargo")
         .arg("test")
@@ -49,6 +49,9 @@ fn test_target(target: &str, arch: Arch, env: Env, family: Family, os: Os) -> Re
     Ok(())
 }
 
-fn format_struct_into_test_data_file(obj: impl fmt::Debug, file_name: &str) {
-    fs::write(format!("./tests/test_data/{}.txt", file_name), format!("{:#?}", obj)).unwrap()
+fn format_struct_into_test_data_file(obj: impl fmt::Debug, file_name: &str) -> Result<(), Box<dyn Error>> {
+    fs::create_dir("./tests/test_data")?;
+    fs::write(format!("./tests/test_data/{}.txt", file_name), format!("{:#?}", obj))?;
+
+    Ok(())
 }
