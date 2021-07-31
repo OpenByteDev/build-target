@@ -1,4 +1,4 @@
-use std::{error::Error, fmt, fs, path::PathBuf, process::Command, str::FromStr};
+use std::{error::Error, fmt, fs, io, path::PathBuf, process::Command, str::FromStr};
 
 use build_target::{Arch, Env, Family, Os};
 use serial_test::serial;
@@ -50,7 +50,10 @@ fn test_target(target: &str, arch: Arch, env: Env, family: Family, os: Os) -> Re
 }
 
 fn format_struct_into_test_data_file(obj: impl fmt::Debug, file_name: &str) -> Result<(), Box<dyn Error>> {
-    fs::create_dir("./tests/test_data")?;
+    match fs::create_dir("./tests/test_data") {
+        Err(e) if e.kind() == io::ErrorKind::AlreadyExists => Ok(()),
+        r => r
+    }?;
     fs::write(format!("./tests/test_data/{}.txt", file_name), format!("{:#?}", obj))?;
 
     Ok(())
