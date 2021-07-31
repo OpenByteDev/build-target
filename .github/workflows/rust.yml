@@ -24,6 +24,8 @@ jobs:
           toolchain: stable
           target: ${{ matrix.target }}
           override: true
+    - name: Install msvc
+      run: sudo apt install mingw-w64
     - name: Build
       run: cargo build --target ${{ matrix.target }} --verbose
     - name: Run tests
