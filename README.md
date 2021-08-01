@@ -1,6 +1,6 @@
 # build-target
 
-[![Build](https://github.com/OpenByteDev/build-target/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/OpenByteDev/build-target/actions/workflows/rust.yml)
+[![Build](https://github.com/OpenByteDev/build-target/actions/workflows/rust.yml/badge.svg)](https://github.com/OpenByteDev/build-target/actions/workflows/rust.yml)
 [![crates.io](https://img.shields.io/crates/v/build-target.svg)](https://crates.io/crates/build-target)
 [![Documentation](https://docs.rs/build-target/badge.svg)](https://docs.rs/build-target)
 [![dependency status](https://deps.rs/repo/github/openbytedev/build-target/status.svg)](https://deps.rs/repo/github/openbytedev/build-target)
