@@ -10,7 +10,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  test:
+  test-linux:
     runs-on: ubuntu-latest
     strategy:
       matrix: 
@@ -33,9 +33,8 @@ jobs:
       with:
           command: test
           args: --target ${{ matrix.target }} --verbose
-
-jobs:
-  test:
+          
+  test-windows:
     runs-on: windows-latest
     strategy:
       matrix: 
