@@ -24,7 +24,7 @@ fn main() {
 ```
 
 ## Attribution
-This crate is inspired from `platforms` and is based on it's code.
+This crate is inspired from [`platforms`](https://crates.io/crates/platforms) and is based on it's code.
 
 ## License
 Licensed under MIT license ([LICENSE](https://github.com/OpenByteDev/build-target/blob/master/LICENSE) or http://opensource.org/licenses/MIT)
