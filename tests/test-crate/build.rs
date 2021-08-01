@@ -9,7 +9,6 @@ fn main() {
         "x86_64-pc-windows-gnu": (Arch::X86_64, Env::GNU, Family::Windows, Os::Windows),
         "x86_64-unknown-linux-gnu": (Arch::X86_64, Env::GNU, Family::Unix, Os::Linux),
         "x86_64-unknown-linux-musl": (Arch::X86_64, Env::Musl, Family::Unix, Os::Linux),
-        "x86_64-unknown-linux-musl": (Arch::X86_64, Env::Musl, Family::Unix, Os::Linux),
     };
 
     let target = target_triple().unwrap();

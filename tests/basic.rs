@@ -2,7 +2,7 @@ use std::{error::Error, path::PathBuf, process::Command, str::FromStr};
 
 #[test]
 fn test() -> Result<(), Box<dyn Error>> {
-    let crate_path = PathBuf::from_str("./tests")?.join("test-crate").canonicalize()?;
+    let crate_path = PathBuf::from_str("tests")?.join("test-crate").canonicalize()?;
 
     Command::new("cargo")
         .arg("build")

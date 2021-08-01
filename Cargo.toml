@@ -12,5 +12,3 @@ edition = "2018"
 categories = ["development-tools::build-utils"]
 keywords = ["build", "target"]
 
-[dev-dependencies]
-serial_test = "0.5"
