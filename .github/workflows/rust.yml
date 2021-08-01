@@ -38,7 +38,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix: 
-        target: ["i686-pc-windows-gnu", "x86_64-pc-windows-gnu"]
+        target: ["i686-pc-windows-msvc", "x86_64-pc-windows-gnu"]
     steps:
     - uses: actions/checkout@v2
     - name: Install toolchain
