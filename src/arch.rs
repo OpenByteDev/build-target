@@ -66,6 +66,7 @@ pub enum Arch<'a> {
 
 impl<'a> Arch<'a> {
     /// String representing this target architecture which matches `cfg(target_arch)`.
+    #[must_use]
     pub fn as_str(&self) -> &str {
         match self {
             Arch::AARCH64 => "aarch64",

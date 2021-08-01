@@ -34,6 +34,7 @@ pub enum Env<'a> {
 
 impl<'a> Env<'a> {
     /// String representing this environment which matches `#[cfg(target_env)]`.
+    #[must_use]
     pub fn as_str(&self) -> &str {
         match self {
             Env::GNU => "gnu",

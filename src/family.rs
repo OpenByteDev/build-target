@@ -24,6 +24,7 @@ pub enum Family<'a> {
 
 impl<'a> Family<'a> {
     /// String representing this target family which matches `#[cfg(target_family)]`
+    #[must_use]
     pub fn as_str(&self) -> &str {
         match self {
             Family::Unix => "unix",
