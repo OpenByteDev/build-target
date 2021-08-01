@@ -26,13 +26,13 @@ jobs:
           override: true
     - name: Build
       uses: actions-rs/cargo@v1
-        with:
+      with:
           use-cross: true
           command: build
           args: --target ${{ matrix.target }} --verbose
     - name: Test
       uses: actions-rs/cargo@v1
-        with:
+      with:
           use-cross: true
           command: test
           args: --target ${{ matrix.target }} --verbose
