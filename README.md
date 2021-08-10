@@ -13,7 +13,7 @@ A crate that provides programmatic access to information about the current build
 ```rust
 // inside build.rs
 fn main() {
-	// panics are just the easiest way to output in build scripts.
+    // panics are just the easiest way to output in build scripts.
     panic!("current build target (arch={}, env={}, os={}, family={})",
         Arch::target().unwrap(),
         Env::target().unwrap(),
@@ -24,7 +24,7 @@ fn main() {
 ```
 
 ## Attribution
-This crate is inspired from [`platforms`](https://crates.io/crates/platforms) and is based on it's code.
+This crate is inspired by [`platforms`](https://crates.io/crates/platforms) and is based on it's code.
 
 ## License
 Licensed under MIT license ([LICENSE](https://github.com/OpenByteDev/build-target/blob/master/LICENSE) or http://opensource.org/licenses/MIT)
