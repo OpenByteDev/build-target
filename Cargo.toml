@@ -1,6 +1,6 @@
 [package]
 name = "build-target"
-version = "0.1.1"
+version = "0.2.0"
 description = "A crate that provides programmatic access to information about the current build target."
 readme = "README.md"
 repository = "https://github.com/OpenByteDev/build-target" 
@@ -10,5 +10,4 @@ license = "MIT"
 authors = ["OpenByte <development.openbyte@gmail.com>"]
 edition = "2018"
 categories = ["development-tools::build-utils"]
-keywords = ["build", "target"]
-
+keywords = ["build", "target", "env", "utils"]
