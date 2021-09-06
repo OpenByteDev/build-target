@@ -4,7 +4,8 @@ use std::{
     fmt,
 };
 
-/// `target_family`: A a more generic description of a target, such as the family of
+
+/// A a more generic description of a target, such as the family of
 /// the operating systems or architectures that the target generally falls into.
 #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
 #[non_exhaustive]
@@ -34,7 +35,7 @@ impl<'a> Family<'a> {
         }
     }
 
-    /// Create a new [`Arch`] from the given string.
+    /// Tries to parse the given string as an [`Family`] falling back to [`Family::Other`] for unknown values.
     fn from_str(os_name: impl Into<Cow<'a, str>>) -> Self {
         let os_name = os_name.into();
         match os_name.as_ref() {
@@ -45,6 +46,7 @@ impl<'a> Family<'a> {
         }
     }
 
+    /// Gets the current target [`Family`].
     pub fn target() -> Result<Self, VarError> {
         env::var("CARGO_CFG_TARGET_FAMILY").map(Self::from_str)
     }

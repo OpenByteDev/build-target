@@ -5,7 +5,9 @@ use std::{
 };
 
 // adapted from target/env.rs from platforms crate
-/// `target_env`: target enviroment that disambiguates the target platform by ABI / libc.
+/// Target enviroment that disambiguates the target platform by ABI / libc.
+/// 
+/// # Note
 /// This value is closely related to the fourth element of the platform target triple,
 /// though it is not identical. For example, embedded ABIs such as `gnueabihf` will simply
 /// define `target_env` as `"gnu"` (i.e. [`Env::GNU`])
@@ -46,7 +48,7 @@ impl<'a> Env<'a> {
         }
     }
 
-    /// Create a new [`Env`] from the given string.
+    /// Tries to parse the given string as an [`Env`] falling back to [`Env::Other`] for unknown values.
     fn from_str(env_name: impl Into<Cow<'a, str>>) -> Self {
         let env_name = env_name.into();
         match env_name.as_ref() {
@@ -59,6 +61,7 @@ impl<'a> Env<'a> {
         }
     }
 
+    /// Gets the current target [`Env`].
     pub fn target() -> Result<Self, VarError> {
         env::var("CARGO_CFG_TARGET_ENV").map(Self::from_str)
     }

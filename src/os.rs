@@ -5,7 +5,10 @@ use std::{
 };
 
 // adapted from target/os.rs from platforms crate
-/// `target_os`: Operating system of the target. This value is closely related to the second
+/// Operating system of the target. 
+/// 
+/// # Note
+/// This value is closely related to the second
 /// and third element of the platform target triple, though it is not identical.
 #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
 #[non_exhaustive]
@@ -87,7 +90,7 @@ impl<'a> Os<'a> {
         }
     }
 
-    /// Create a new [`Arch`] from the given string.
+    /// Tries to parse the given string as an [`Os`] falling back to [`Os::Other`] for unknown values.
     fn from_str(os_name: impl Into<Cow<'a, str>>) -> Self {
         let os_name = os_name.into();
         match os_name.as_ref() {
@@ -111,6 +114,7 @@ impl<'a> Os<'a> {
         }
     }
 
+    /// Gets the current target [`Os`].
     pub fn target() -> Result<Self, VarError> {
         env::var("CARGO_CFG_TARGET_OS").map(Self::from_str)
     }

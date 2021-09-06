@@ -5,7 +5,7 @@ use std::{
 };
 
 // adapted from target/arch.rs from platforms crate
-/// `target_arch`: Target CPU architecture
+/// Target CPU architecture
 #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
 #[non_exhaustive]
 pub enum Arch<'a> {
@@ -65,7 +65,7 @@ pub enum Arch<'a> {
 }
 
 impl<'a> Arch<'a> {
-    /// String representing this target architecture which matches `cfg(target_arch)`.
+    /// String representing this target architecture which matches `#[cfg(target_arch)]`.
     #[must_use]
     pub fn as_str(&self) -> &str {
         match self {
@@ -90,7 +90,7 @@ impl<'a> Arch<'a> {
         }
     }
 
-    /// Create a new [`Arch`] from the given string.
+    /// Tries to parse the given string as an [`Arch`] falling back to [`Arch::Other`] for unknown values.
     fn from_str(arch_name: impl Into<Cow<'a, str>>) -> Self {
         let arch_name = arch_name.into();
         match arch_name.as_ref() {
@@ -115,6 +115,7 @@ impl<'a> Arch<'a> {
         }
     }
 
+    /// Gets the current target [`Arch`].
     pub fn target() -> Result<Self, VarError> {
         env::var("CARGO_CFG_TARGET_ARCH").map(Self::from_str)
     }
