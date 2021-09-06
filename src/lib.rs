@@ -1,3 +1,5 @@
+#![allow(clippy::needless_doctest_main)]
+
 //! A crate that provides programmatic access to information about the current build target inside `build.rs`.
 //! 
 //! ## Examples
@@ -25,6 +27,7 @@
 //!     let triple = build_target::target_triple().unwrap(); // eg. x86_64-unknown-linux-gnu", ...
 //! }
 //! ```
+
 
 mod arch;
 pub use arch::*;
