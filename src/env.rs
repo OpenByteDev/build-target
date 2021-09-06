@@ -4,6 +4,8 @@ use std::{
     fmt,
 };
 
+use crate::utils;
+
 // adapted from target/env.rs from platforms crate
 /// Target enviroment that disambiguates the target platform by ABI / libc.
 /// 
@@ -50,7 +52,7 @@ impl<'a> Env<'a> {
 
     /// Tries to parse the given string as an [`Env`] falling back to [`Env::Other`] for unknown values.
     fn from_str(env_name: impl Into<Cow<'a, str>>) -> Self {
-        let env_name = env_name.into();
+        let env_name = utils::into_ascii_lowercase(env_name.into());
         match env_name.as_ref() {
             "gnu" => Env::GNU,
             "msvc" => Env::MSVC,

@@ -4,6 +4,8 @@ use std::{
     fmt,
 };
 
+use crate::utils;
+
 // adapted from target/os.rs from platforms crate
 /// Operating system of the target. 
 /// 
@@ -91,9 +93,9 @@ impl<'a> Os<'a> {
     }
 
     /// Tries to parse the given string as an [`Os`] falling back to [`Os::Other`] for unknown values.
-    fn from_str(os_name: impl Into<Cow<'a, str>>) -> Self {
-        let os_name = os_name.into();
-        match os_name.as_ref() {
+    fn from_str(os: impl Into<Cow<'a, str>>) -> Self {
+        let os = utils::into_ascii_lowercase(os.into());
+        match os.as_ref() {
             "android" => Os::Android,
             "bitrig" => Os::Bitrig,
             "cloudabi" => Os::CloudABI,
@@ -110,7 +112,7 @@ impl<'a> Os<'a> {
             "redox" => Os::Redox,
             "solaris" => Os::Solaris,
             "windows" => Os::Windows,
-            _ => Os::Other(os_name),
+            _ => Os::Other(os),
         }
     }
 

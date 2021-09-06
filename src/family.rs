@@ -4,6 +4,7 @@ use std::{
     fmt,
 };
 
+use crate::utils;
 
 /// A a more generic description of a target, such as the family of
 /// the operating systems or architectures that the target generally falls into.
@@ -36,13 +37,13 @@ impl<'a> Family<'a> {
     }
 
     /// Tries to parse the given string as an [`Family`] falling back to [`Family::Other`] for unknown values.
-    fn from_str(os_name: impl Into<Cow<'a, str>>) -> Self {
-        let os_name = os_name.into();
-        match os_name.as_ref() {
+    fn from_str(os_family: impl Into<Cow<'a, str>>) -> Self {
+        let os_family = utils::into_ascii_lowercase(os_family.into());
+        match os_family.as_ref() {
             "unix" => Family::Unix,
             "windows" => Family::Windows,
             "wasm" => Family::Wasm,
-            _ => Family::Other(os_name),
+            _ => Family::Other(os_family),
         }
     }
 

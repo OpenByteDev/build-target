@@ -1,8 +1,6 @@
-use std::{
-    borrow::Cow,
-    env::{self, VarError},
-    fmt,
-};
+use std::{borrow::Cow, env::{self, VarError}, fmt};
+
+use crate::utils;
 
 // adapted from target/arch.rs from platforms crate
 /// Target CPU architecture
@@ -92,7 +90,7 @@ impl<'a> Arch<'a> {
 
     /// Tries to parse the given string as an [`Arch`] falling back to [`Arch::Other`] for unknown values.
     fn from_str(arch_name: impl Into<Cow<'a, str>>) -> Self {
-        let arch_name = arch_name.into();
+        let arch_name = utils::into_ascii_lowercase(arch_name.into());
         match arch_name.as_ref() {
             "aarch64" => Arch::AARCH64,
             "arm" => Arch::ARM,
