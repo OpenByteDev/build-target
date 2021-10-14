@@ -8,6 +8,6 @@ homepage = "https://github.com/OpenByteDev/build-target"
 documentation = "https://docs.rs/build-target"
 license = "MIT"
 authors = ["OpenByte <development.openbyte@gmail.com>"]
-edition = "2018"
+edition = "2021"
 categories = ["development-tools::build-utils"]
 keywords = ["build", "target", "env", "utils"]
