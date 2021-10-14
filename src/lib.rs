@@ -4,7 +4,7 @@
 //!
 //! ## Examples
 //! Prints all available information about the current build target.
-//! ```rust
+//! ```rust no_run
 //! // inside build.rs
 //!
 //! fn main() {
@@ -16,7 +16,7 @@
 //! ```
 //!
 //! Gets the parts of the current build target individually.
-//! ```rust
+//! ```rust no_run
 //! // inside build.rs
 //!
 //! fn main() {
