@@ -3,6 +3,7 @@ use std::{borrow::Cow, env::VarError};
 use crate::{target_triple, Arch, Env, Family, Os};
 
 /// Combined information about a build target.
+#[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
 pub struct Target<'a> {
     pub arch: Arch<'a>,
     pub env: Env<'a>,
