@@ -43,6 +43,9 @@ pub use family::*;
 mod target;
 pub use target::*;
 
+mod profile;
+pub use profile::*;
+
 mod utils;
 
 /// Gets the current target [`Arch`]. This function is equivalent to [`Arch::target()`].
