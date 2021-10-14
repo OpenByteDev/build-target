@@ -7,8 +7,8 @@ use std::{
 use crate::utils;
 
 // adapted from target/os.rs from platforms crate
-/// Operating system of the target. 
-/// 
+/// Operating system of the target.
+///
 /// # Note
 /// This value is closely related to the second
 /// and third element of the platform target triple, though it is not identical.

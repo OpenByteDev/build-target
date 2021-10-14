@@ -8,7 +8,7 @@ use crate::utils;
 
 // adapted from target/env.rs from platforms crate
 /// Target enviroment that disambiguates the target platform by ABI / libc.
-/// 
+///
 /// # Note
 /// This value is closely related to the fourth element of the platform target triple,
 /// though it is not identical. For example, embedded ABIs such as `gnueabihf` will simply

@@ -1,4 +1,8 @@
-use std::{borrow::Cow, env::{self, VarError}, fmt};
+use std::{
+    borrow::Cow,
+    env::{self, VarError},
+    fmt,
+};
 
 use crate::utils;
 

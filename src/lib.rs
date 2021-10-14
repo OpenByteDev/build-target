@@ -1,12 +1,12 @@
 #![allow(clippy::needless_doctest_main)]
 
 //! A crate that provides programmatic access to information about the current build target inside `build.rs`.
-//! 
+//!
 //! ## Examples
 //! Prints all available information about the current build target.
 //! ```rust
 //! // inside build.rs
-//! 
+//!
 //! fn main() {
 //!     // The panic is just used to print the information to the console.
 //!     panic!("current build target: {:#?}",
@@ -14,11 +14,11 @@
 //!     );
 //! }
 //! ```
-//! 
+//!
 //! Gets the parts of the current build target individually.
 //! ```rust
 //! // inside build.rs
-//! 
+//!
 //! fn main() {
 //!     let arch   = build_target::target_arch().unwrap();   // eg. "x86_64", "aarch64", ...
 //!     let env    = build_target::target_env().unwrap();    // eg. "gnu", "msvc", ...
@@ -27,7 +27,6 @@
 //!     let triple = build_target::target_triple().unwrap(); // eg. x86_64-unknown-linux-gnu", ...
 //! }
 //! ```
-
 
 mod arch;
 pub use arch::*;
@@ -49,7 +48,7 @@ mod utils;
 /// Gets the current target [`Arch`]. This function is equivalent to [`Arch::target()`].
 pub fn target_arch() -> Result<Arch<'static>, std::env::VarError> {
     Arch::target()
-} 
+}
 /// Gets the current target [`Env`]. This function is equivalent to [`Env::target()`].
 pub fn target_env() -> Result<Env<'static>, std::env::VarError> {
     Env::target()
@@ -65,7 +64,7 @@ pub fn target_family() -> Result<Family<'static>, std::env::VarError> {
 /// Gets the current target triple.
 pub fn target_triple() -> Result<String, std::env::VarError> {
     std::env::var("TARGET")
-} 
+}
 /// Gets the current target information as a [`Target`]. This function is equivalent to [`Target::current()`].
 pub fn target() -> Result<Target<'static>, std::env::VarError> {
     Target::current()

@@ -31,8 +31,8 @@ pub fn to_ascii_lowercase(s: &'_ str) -> Cow<'_, str> {
 
 #[cfg(test)]
 mod tests {
-    use std::borrow::Cow;
     use super::*;
+    use std::borrow::Cow;
 
     #[test]
     fn basic() {
