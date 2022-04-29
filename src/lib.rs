@@ -1,4 +1,4 @@
-#![allow(clippy::needless_doctest_main)]
+#![allow(clippy::needless_doctest_main, clippy::should_implement_trait)]
 
 //! A crate that provides programmatic access to information about the current build target inside `build.rs`.
 //!
