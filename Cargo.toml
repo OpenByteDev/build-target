@@ -1,6 +1,6 @@
 [package]
 name = "build-target"
-version = "0.3.1"
+version = "0.4.0"
 description = "A crate that provides programmatic access to information about the current build target."
 readme = "README.md"
 repository = "https://github.com/OpenByteDev/build-target" 
