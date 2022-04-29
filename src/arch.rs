@@ -93,7 +93,7 @@ impl<'a> Arch<'a> {
     }
 
     /// Tries to parse the given string as an [`Arch`] falling back to [`Arch::Other`] for unknown values.
-    fn from_str(arch_name: impl Into<Cow<'a, str>>) -> Self {
+    pub fn from_str(arch_name: impl Into<Cow<'a, str>>) -> Self {
         let arch_name = utils::into_ascii_lowercase(arch_name.into());
         match arch_name.as_ref() {
             "aarch64" => Arch::AARCH64,

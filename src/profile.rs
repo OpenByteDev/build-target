@@ -41,7 +41,7 @@ impl<'a> Profile<'a> {
     }
 
     /// Tries to parse the given string as an [`Profile`] falling back to [`Profile::Other`] for unknown values.
-    fn from_str(profile: impl Into<Cow<'a, str>>) -> Self {
+    pub fn from_str(profile: impl Into<Cow<'a, str>>) -> Self {
         let profile = utils::into_ascii_lowercase(profile.into());
         match profile.as_ref() {
             "dev" => Profile::Dev,

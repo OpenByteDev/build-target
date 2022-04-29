@@ -51,7 +51,7 @@ impl<'a> Env<'a> {
     }
 
     /// Tries to parse the given string as an [`Env`] falling back to [`Env::Other`] for unknown values.
-    fn from_str(env_name: impl Into<Cow<'a, str>>) -> Self {
+    pub fn from_str(env_name: impl Into<Cow<'a, str>>) -> Self {
         let env_name = utils::into_ascii_lowercase(env_name.into());
         match env_name.as_ref() {
             "gnu" => Env::GNU,

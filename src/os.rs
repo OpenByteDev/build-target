@@ -93,7 +93,7 @@ impl<'a> Os<'a> {
     }
 
     /// Tries to parse the given string as an [`Os`] falling back to [`Os::Other`] for unknown values.
-    fn from_str(os: impl Into<Cow<'a, str>>) -> Self {
+    pub fn from_str(os: impl Into<Cow<'a, str>>) -> Self {
         let os = utils::into_ascii_lowercase(os.into());
         match os.as_ref() {
             "android" => Os::Android,

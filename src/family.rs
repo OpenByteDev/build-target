@@ -37,7 +37,7 @@ impl<'a> Family<'a> {
     }
 
     /// Tries to parse the given string as an [`Family`] falling back to [`Family::Other`] for unknown values.
-    fn from_str(os_family: impl Into<Cow<'a, str>>) -> Self {
+    pub fn from_str(os_family: impl Into<Cow<'a, str>>) -> Self {
         let os_family = utils::into_ascii_lowercase(os_family.into());
         match os_family.as_ref() {
             "unix" => Family::Unix,
