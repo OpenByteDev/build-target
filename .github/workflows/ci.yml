@@ -61,17 +61,6 @@ jobs:
         run: cargo build --target ${{ matrix.target }}
       - name: Test
         run: cargo test --target ${{ matrix.target }} --all-targets
-    steps:
-    - uses: actions/checkout@v4
-    - name: Install latest ${{ matrix.toolchain }}
-      uses: dtolnay/rust-toolchain@master
-      with:
-          target: ${{ matrix.target }}
-          toolchain: ${{ matrix.toolchain }}
-    - name: Build
-      run: cargo build --target ${{ matrix.target }}
-    - name: Test
-      run: cargo test --target ${{ matrix.target }} --all-targets
 
   documentation:
     runs-on: ubuntu-latest
