@@ -21,6 +21,7 @@
 //!
 //! fn main() {
 //!     let arch   = build_target::target_arch().unwrap();   // eg. "x86_64", "aarch64", ...
+//!     let endian = build_target::target_endian().unwrap(); // eg. "big", "little", ...
 //!     let env    = build_target::target_env().unwrap();    // eg. "gnu", "msvc", ...
 //!     let family = build_target::target_family().unwrap(); // eg. "windows", "unix", ...
 //!     let os     = build_target::target_os().unwrap();     // eg. "android", "linux", ...
@@ -31,11 +32,17 @@
 mod arch;
 pub use arch::*;
 
+mod endian;
+pub use endian::*;
+
 mod env;
 pub use env::*;
 
 mod os;
 pub use os::*;
+
+mod pointer_width;
+pub use pointer_width::*;
 
 mod family;
 pub use family::*;
@@ -52,6 +59,10 @@ mod utils;
 pub fn target_arch() -> Result<Arch<'static>, std::env::VarError> {
     Arch::target()
 }
+/// Gets the current target [`Endian`]. This function is equivalent to [`Endian::target()`].
+pub fn target_endian() -> Result<Endian<'static>, std::env::VarError> {
+    Endian::target()
+}
 /// Gets the current target [`Env`]. This function is equivalent to [`Env::target()`].
 pub fn target_env() -> Result<Env<'static>, std::env::VarError> {
     Env::target()
@@ -59,6 +70,10 @@ pub fn target_env() -> Result<Env<'static>, std::env::VarError> {
 /// Gets the current target [`Os`]. This function is equivalent to [`Os::target()`].
 pub fn target_os() -> Result<Os<'static>, std::env::VarError> {
     Os::target()
+}
+/// Gets the current target [`PointerWidth`]. This function is equivalent to [`PointerWidth::target()`].
+pub fn target_pointer_width() -> Result<PointerWidth<'static>, std::env::VarError> {
+    PointerWidth::target()
 }
 /// Gets the current target [`Family`]. This function is equivalent to [`Family::target()`].
 pub fn target_family() -> Result<Family<'static>, std::env::VarError> {
