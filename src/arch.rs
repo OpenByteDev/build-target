@@ -35,8 +35,11 @@ pub enum Arch<'a> {
     /// `powerpc64`: 64-bit POWERPC platform
     POWERPC64,
 
-    /// `riscv`: RISC-V CPU architecture
+    /// `riscv`: 32-bit RISC-V CPU architecture
     RISCV,
+
+    /// `riscv64`: 64-bit RISC-V CPU architecture
+    RISCV64,
 
     /// `s390x`: 64-bit IBM z/Architecture
     S390X,
@@ -80,6 +83,7 @@ impl<'a> Arch<'a> {
             Arch::POWERPC => "powerpc",
             Arch::POWERPC64 => "powerpc64",
             Arch::RISCV => "riscv",
+            Arch::RISCV64 => "riscv64",
             Arch::S390X => "s390x",
             Arch::SPARC => "sparc",
             Arch::SPARC64 => "sparc64",
@@ -105,6 +109,7 @@ impl<'a> Arch<'a> {
             "powerpc" => Arch::POWERPC,
             "powerpc64" => Arch::POWERPC64,
             "riscv" => Arch::RISCV,
+            "riscv64" => Arch::RISCV64,
             "s390x" => Arch::S390X,
             "sparc" => Arch::SPARC,
             "sparc64" => Arch::SPARC64,
