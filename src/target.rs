@@ -1,6 +1,6 @@
 use std::{borrow::Cow, env::VarError};
 
-use crate::{target_triple, Arch, Env, Family, Os};
+use crate::{Arch, Env, Family, Os, target_triple};
 
 /// Combined information about a build target.
 #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]

@@ -1,128 +1,118 @@
 use std::{
-    borrow::Cow,
     env::{self, VarError},
     fmt,
 };
 
-use crate::utils;
+use crate::utils::define_target_enum;
 
-// adapted from target/os.rs from platforms crate
-/// Operating system of the target.
-///
-/// # Note
-/// This value is closely related to the second
-/// and third element of the platform target triple, though it is not identical.
-#[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
-#[non_exhaustive]
-pub enum Os<'a> {
-    /// `android`: Google's Android mobile operating system
-    Android,
+define_target_enum! {
+    // adapted from target/os.rs from platforms crate
+    /// Operating system of the target.
+    ///
+    /// # Note
+    /// This value is closely related to the second
+    /// and third element of the platform target triple, though it is not identical.
+    #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
+    #[non_exhaustive]
+    pub enum Os<'a> {
+        /// IBM AIX operating system
+        Aix => "aix",
+        /// AMD HSA architecture
+        Amdhsa => "amdhsa",
+        /// Google’s Android mobile operating system
+        Android => "android",
+        /// CUDA parallel computing platform
+        Cuda => "cuda",
+        /// POSIX layer for Windows
+        Cygwin => "cygwin",
+        /// DragonflyBSD
+        Dragonfly => "dragonfly",
+        /// The emscripten JavaScript transpiler
+        Emscripten => "emscripten",
+        /// Espressif IoT framework
+        Espidf => "espidf",
+        /// The FreeBSD operating system
+        FreeBSD => "freebsd",
+        /// Google’s next-gen Rust OS
+        Fuchsia => "fuchsia",
+        /// Haiku, an open source BeOS clone
+        Haiku => "haiku",
+        /// Unikernel targeting HPC and cloud environments
+        Hermit => "hermit",
+        Horizon => "horizon",
+        Hurd => "hurd",
+        /// illumos is a partly free and open-source Unix OS based on OpenSolaris
+        IllumOS => "illumos",
+        /// Apple’s iOS mobile operating system
+        #[allow(non_camel_case_types)]
+        iOS => "ios",
+        /// Microkernel OS framework
+        L4re => "l4re",
+        /// Linux
+        Linux => "linux",
+        /// Real-time OS
+        Lynxos178 => "lynxos178",
+        /// Apple’s Mac OS X
+        MacOS => "macos",
+        /// The NetBSD operating system
+        NetBSD => "netbsd",
+        None => "none",
+        /// QNX Neutrino OS
+        Nto => "nto",
+        /// Embedded real-time OS
+        Nuttx => "nuttx",
+        /// The OpenBSD operating system
+        OpenBSD => "openbsd",
+        /// PlayStation Portable OS
+        Psp => "psp",
+        /// PlayStation OS
+        Psx => "psx",
+        /// Redox, a Unix-like OS written in Rust
+        Redox => "redox",
+        /// Real-time executive OS
+        Rtems => "rtems",
+        /// Oracle’s (formerly Sun) Solaris operating system
+        Solaris => "solaris",
+        SolidAsp3 => "solid_asp3",
+        /// Trusted Execution Environment OS
+        TeeOS => "teeos",
+        /// Android trusted environment
+        Trusty => "trusty",
+        /// Apple TV OS
+        TvOS => "tvos",
+        /// Firmware interface
+        Uefi => "uefi",
+        Unknown => "unknown",
+        /// Apple spatial OS
+        VisionOS => "visionos",
+        /// PlayStation Vita OS
+        Vita => "vita",
+        /// VVxWorks is a deterministic, priority-based preemptive RTOS with low latency and minimal jitter
+        VxWorks => "vxworks",
+        /// The WebAssembly System Interface
+        Wasi => "wasi",
+        /// Apple Watch OS
+        WatchOS => "watchos",
+        /// Microsoft’s Windows operating system
+        Windows => "windows",
+        /// Privacy-focused microkernel OS
+        Xous => "xous",
+        /// Zero-knowledge proof VM
+        Zkvm => "zkvm",
+    }
 
-    /// `bitrig`: OpenBSD-based operating system
-    Bitrig,
-
-    /// `cloudabi`: Nuxi CloudABI runtime environment
-    CloudABI,
-
-    /// `dragonfly`: DragonflyBSD
-    Dragonfly,
-
-    /// `emscripten`: The emscripten JavaScript transpiler
-    Emscripten,
-
-    /// `freebsd`: The FreeBSD operating system
-    FreeBSD,
-
-    /// `fuchsia`: Google's next-gen Rust Os
-    Fuchsia,
-
-    /// `haiku`: Haiku, an open source BeOs clone
-    Haiku,
-
-    /// `ios`: Apple's iOs mobile operating system
-    #[allow(non_camel_case_types)]
-    iOs,
-
-    /// `linux`: Linux
-    Linux,
-
-    /// `macos`: Apple's Mac Os X
-    MacOs,
-
-    /// `netbsd`: The NetBSD operating system
-    NetBSD,
-
-    /// `openbsd`: The OpenBSD operating system
-    OpenBSD,
-
-    /// `redox`: Redox, a Unix-like Os written in Rust
-    Redox,
-
-    /// `solaris`: Oracle's (formerly Sun) Solaris operating system
-    Solaris,
-
-    /// `windows`: Microsoft's Windows operating system
-    Windows,
-
-    /// Operating systems we don't know about
-    Other(Cow<'a, str>),
+    as_str_doc = "String representing this target OS which matches `#[cfg(target_os)]`",
+    from_str_doc = "Tries to parse the given string as an [`Os`] falling back to [`Os::Other`] for unknown values",
 }
 
-impl<'a> Os<'a> {
-    /// String representing this target OS which matches `#[cfg(target_os)]`
-    pub fn as_str(&self) -> &str {
-        match self {
-            Os::Android => "android",
-            Os::Bitrig => "bitrig",
-            Os::CloudABI => "cloudabi",
-            Os::Dragonfly => "dragonfly",
-            Os::Emscripten => "emscripten",
-            Os::FreeBSD => "freebsd",
-            Os::Fuchsia => "fuchsia",
-            Os::Haiku => "haiku",
-            Os::iOs => "ios",
-            Os::Linux => "linux",
-            Os::MacOs => "macos",
-            Os::NetBSD => "netbsd",
-            Os::OpenBSD => "openbsd",
-            Os::Redox => "redox",
-            Os::Solaris => "solaris",
-            Os::Windows => "windows",
-            Os::Other(s) => s,
-        }
-    }
-
-    /// Tries to parse the given string as an [`Os`] falling back to [`Os::Other`] for unknown values.
-    pub fn from_str(os: impl Into<Cow<'a, str>>) -> Self {
-        let os = utils::into_ascii_lowercase(os.into());
-        match os.as_ref() {
-            "android" => Os::Android,
-            "bitrig" => Os::Bitrig,
-            "cloudabi" => Os::CloudABI,
-            "dragonfly" => Os::Dragonfly,
-            "emscripten" => Os::Emscripten,
-            "freebsd" => Os::FreeBSD,
-            "fuchsia" => Os::Fuchsia,
-            "haiku" => Os::Haiku,
-            "ios" => Os::iOs,
-            "linux" => Os::Linux,
-            "macos" => Os::MacOs,
-            "netbsd" => Os::NetBSD,
-            "openbsd" => Os::OpenBSD,
-            "redox" => Os::Redox,
-            "solaris" => Os::Solaris,
-            "windows" => Os::Windows,
-            _ => Os::Other(os),
-        }
-    }
-
+impl Os<'_> {
     /// Gets the current target [`Os`].
     pub fn target() -> Result<Self, VarError> {
         env::var("CARGO_CFG_TARGET_OS").map(Self::from_str)
     }
 }
 
-impl<'a> fmt::Display for Os<'a> {
+impl fmt::Display for Os<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(self.as_str())
     }

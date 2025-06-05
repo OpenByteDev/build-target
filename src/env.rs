@@ -1,75 +1,60 @@
+use crate::utils::define_target_enum;
 use std::{
-    borrow::Cow,
     env::{self, VarError},
     fmt,
 };
 
-use crate::utils;
+define_target_enum! {
+    // adapted from target/env.rs from platforms crate
+    /// Target enviroment that disambiguates the target platform by ABI / libc.
+    ///
+    /// # Note
+    /// This value is closely related to the fourth element of the platform target triple,
+    /// though it is not identical. For example, embedded ABIs such as `gnueabihf` will simply
+    /// define `target_env` as `"gnu"` (i.e. [`Env::GNU`])
+    #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
+    #[non_exhaustive]
+    pub enum Env<'a> {
+        /// The GNU C Library (glibc)
+        Gnu => "gnu",
+        /// Microsoft Visual C(++)
+        Msvc => "msvc",
+        /// Clean, efficient, standards-conformant libc implementation.
+        Musl => "musl",
+        /// Newlib environment
+        Newlib => "newlib",
+        /// NTO 7.0 environment
+        Nto70 => "nto70",
+        /// NTO 7.1 environment
+        Nto71 => "nto71",
+        /// NTO 7.1 iOSOCK environment
+        Nto71Iosock => "nto71_iosock",
+        /// NTO 8.0 environment
+        Nto80 => "nto80",
+        /// Open Harmony OS
+        OhOS => "ohos",
+        P1 => "p1",
+        P2 => "p2",
+        /// Relibc environment
+        Relibc => "relibc",
+        /// Intel Software Guard Extensions (SGX) Enclave
+        Sgx => "sgx",
+        /// C library for developing embedded Linux systems
+        UClibc => "uclibc"
+    }
 
-// adapted from target/env.rs from platforms crate
-/// Target enviroment that disambiguates the target platform by ABI / libc.
-///
-/// # Note
-/// This value is closely related to the fourth element of the platform target triple,
-/// though it is not identical. For example, embedded ABIs such as `gnueabihf` will simply
-/// define `target_env` as `"gnu"` (i.e. [`Env::GNU`])
-#[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
-#[non_exhaustive]
-pub enum Env<'a> {
-    /// `gnu`: The GNU C Library (glibc)
-    GNU,
-
-    /// `msvc`: Microsoft Visual C(++)
-    MSVC,
-
-    /// `musl`: Clean, efficient, standards-conformant libc implementation.
-    Musl,
-
-    /// `sgx`: Intel Software Guard Extensions (SGX) Enclave
-    SGX,
-
-    /// `uclibc`: C library for developing embedded Linux systems
-    #[allow(non_camel_case_types)]
-    uClibc,
-
-    /// Unknown target environment
-    Other(Cow<'a, str>),
+    as_str_doc = "String representing this environment which matches `#[cfg(target_env)]`.",
+    from_str_doc = "Tries to parse the given string as an [`Env`] falling back to [`Env::Other`] for unknown values.",
 }
 
-impl<'a> Env<'a> {
-    /// String representing this environment which matches `#[cfg(target_env)]`.
-    #[must_use]
-    pub fn as_str(&self) -> &str {
-        match self {
-            Env::GNU => "gnu",
-            Env::MSVC => "msvc",
-            Env::Musl => "musl",
-            Env::SGX => "sgx",
-            Env::uClibc => "uclibc",
-            Env::Other(s) => s,
-        }
-    }
-
-    /// Tries to parse the given string as an [`Env`] falling back to [`Env::Other`] for unknown values.
-    pub fn from_str(env_name: impl Into<Cow<'a, str>>) -> Self {
-        let env_name = utils::into_ascii_lowercase(env_name.into());
-        match env_name.as_ref() {
-            "gnu" => Env::GNU,
-            "msvc" => Env::MSVC,
-            "musl" => Env::Musl,
-            "sgx" => Env::SGX,
-            "uclibc" => Env::uClibc,
-            _ => Env::Other(env_name),
-        }
-    }
-
+impl Env<'_> {
     /// Gets the current target [`Env`].
     pub fn target() -> Result<Self, VarError> {
         env::var("CARGO_CFG_TARGET_ENV").map(Self::from_str)
     }
 }
 
-impl<'a> fmt::Display for Env<'a> {
+impl fmt::Display for Env<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(self.as_str())
     }

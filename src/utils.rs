@@ -1,5 +1,51 @@
 use std::borrow::Cow;
 
+macro_rules! define_target_enum {
+    (
+        $(#[$enum_meta:meta])*
+        $vis:vis enum $name:ident<'a> {
+            $(
+                $(#[$variant_meta:meta])*
+                $variant:ident => $str:literal
+            ),+ $(,)?
+        }
+        as_str_doc = $as_str_doc:literal,
+        from_str_doc = $from_str_doc:literal,
+    ) => {
+        $(#[$enum_meta])*
+        $vis enum $name<'a> {
+            $(
+                $(#[$variant_meta])*
+                #[doc = concat!("`", $str, "`")]
+                $variant,
+            )+
+            /// Unknown value
+            Other(std::borrow::Cow<'a, str>),
+        }
+
+        impl<'a> $name<'a> {
+            #[must_use]
+            #[doc = $as_str_doc]
+            pub fn as_str(&self) -> &str {
+                match self {
+                    $(Self::$variant => $str,)+
+                    Self::Other(s) => s,
+                }
+            }
+
+            #[doc = $from_str_doc]
+            pub fn from_str(name: impl Into<std::borrow::Cow<'a, str>>) -> Self {
+                let name = crate::utils::into_ascii_lowercase(name.into());
+                match name.as_ref() {
+                    $($str => Self::$variant,)+
+                    _ => Self::Other(name),
+                }
+            }
+        }
+    };
+}
+pub(crate) use define_target_enum;
+
 /// Equivalent to [`std::str::to_ascii_lowercase`] but does not allocate if the string is already lowercase and
 /// reuses the allocation if given a [`Cow::Owned`].
 pub fn into_ascii_lowercase(s: Cow<'_, str>) -> Cow<'_, str> {

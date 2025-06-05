@@ -1,129 +1,84 @@
+use crate::utils::define_target_enum;
 use std::{
-    borrow::Cow,
     env::{self, VarError},
     fmt,
 };
 
-use crate::utils;
+define_target_enum! {
+    /// Target CPU architecture
+    #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
+    #[non_exhaustive]
+    pub enum Arch<'a> {
+        /// ARMv8 64-bit architecture
+        AArch64 => "aarch64",
+        /// AMD GPU architecture
+        Amdgpu => "amdgpu",
+        /// 32-bit ARM architecture
+        Arm => "arm",
+        /// ARM64 architecture with Windows EC (Emulation Compatible)
+        Arm64ec => "arm64ec",
+        /// AVR 8-bit microcontroller architecture
+        Avr => "avr",
+        /// Berkeley Packet Filter virtual machine architecture
+        Bpf => "bpf",
+        /// C-SKY CPU architecture
+        Csky => "csky",
+        /// Qualcomm Hexagon DSP architecture
+        Hexagon => "hexagon",
+        /// LoongArch 64-bit CPU architecture
+        Loongarch64 => "loongarch64",
+        /// Motorola 68k CPU architecture
+        M68k => "m68k",
+        /// 32-bit MIPS CPU architecture
+        Mips => "mips",
+        /// MIPS 32-bit Revision 6 architecture
+        Mips32r6 => "mips32r6",
+        /// 64-bit MIPS CPU architecture
+        Mips64 => "mips64",
+        /// MIPS 64-bit Revision 6 architecture
+        Mips64r6 => "mips64r6",
+        /// 16-bit MSP430 microcontroller architecture
+        Msp430 => "msp430",
+        /// 64-bit NVIDIA PTX virtual architecture
+        Nvptx64 => "nvptx64",
+        /// 32-bit POWERPC architecture
+        PowerPc => "powerpc",
+        /// 64-bit POWERPC architecture
+        PowerPc64 => "powerpc64",
+        /// 32-bit RISC-V architecture
+        Riscv32 => "riscv32",
+        /// 64-bit RISC-V architecture
+        Riscv64 => "riscv64",
+        /// 64-bit IBM z/Architecture mainframe CPU
+        S390X => "s390x",
+        /// 32-bit SPARC CPU architecture
+        Sparc => "sparc",
+        /// 64-bit SPARC CPU architecture
+        Sparc64 => "sparc64",
+        /// 32-bit WebAssembly architecture
+        Wasm32 => "wasm32",
+        /// 64-bit WebAssembly architecture
+        Wasm64 => "wasm64",
+        /// Generic 32-bit x86 CPU architecture
+        X86 => "x86",
+        /// 64-bit x86-64 (AMD64) CPU architecture
+        X86_64 => "x86_64",
+        /// Xtensa CPU architecture (commonly used in embedded systems)
+        Xtensa => "xtensa",
+    }
 
-// adapted from target/arch.rs from platforms crate
-/// Target CPU architecture
-#[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
-#[non_exhaustive]
-pub enum Arch<'a> {
-    /// `aarch64`: ARMv8 64-bit architecture
-    AARCH64,
-
-    /// `arm`: 32-bit ARM architecture
-    ARM,
-
-    /// `asm`: asm.js output
-    ASMJS,
-
-    /// `mips`: 32-bit MIPS CPU architecture
-    MIPS,
-
-    /// `mips64`: 32-bit MIPS CPU architecture
-    MIPS64,
-
-    /// `msp430`: 16-bit MSP430 microcontrollers
-    MSP430,
-
-    /// `powerpc`: 32-bit POWERPC platform
-    POWERPC,
-
-    /// `powerpc64`: 64-bit POWERPC platform
-    POWERPC64,
-
-    /// `riscv`: RISC-V CPU architecture
-    RISCV,
-
-    /// `s390x`: 64-bit IBM z/Architecture
-    S390X,
-
-    /// `sparc`: 32-bit SPARC CPU architecture
-    SPARC,
-
-    /// `sparc64`: 64-bit SPARC CPU architecture
-    SPARC64,
-
-    /// `thumbv6`: 16-bit ARM CPU architecture subset
-    THUMBV6,
-
-    /// `thumbv7`: 16-bit ARM CPU architecture subset
-    THUMBV7,
-
-    /// `wasm32`: Web Assembly (32-bit)
-    WASM32,
-
-    /// `x86`: Generic x86 CPU architecture
-    X86,
-
-    /// `x86_64`: "AMD64" CPU architecture
-    X86_64,
-
-    /// Unknown CPU architecture
-    Other(Cow<'a, str>),
+    as_str_doc = "String representing this target architecture which matches `#[cfg(target_arch)]`.",
+    from_str_doc = "Tries to parse the given string as an [`Arch`] falling back to [`Arch::Other`] for unknown values.",
 }
 
-impl<'a> Arch<'a> {
-    /// String representing this target architecture which matches `#[cfg(target_arch)]`.
-    #[must_use]
-    pub fn as_str(&self) -> &str {
-        match self {
-            Arch::AARCH64 => "aarch64",
-            Arch::ARM => "arm",
-            Arch::ASMJS => "asmjs",
-            Arch::MIPS => "mips",
-            Arch::MIPS64 => "mips64",
-            Arch::MSP430 => "msp430",
-            Arch::POWERPC => "powerpc",
-            Arch::POWERPC64 => "powerpc64",
-            Arch::RISCV => "riscv",
-            Arch::S390X => "s390x",
-            Arch::SPARC => "sparc",
-            Arch::SPARC64 => "sparc64",
-            Arch::THUMBV6 => "thumbv6",
-            Arch::THUMBV7 => "thumbv7",
-            Arch::WASM32 => "wasm32",
-            Arch::X86 => "x86",
-            Arch::X86_64 => "x86_64",
-            Arch::Other(s) => s,
-        }
-    }
-
-    /// Tries to parse the given string as an [`Arch`] falling back to [`Arch::Other`] for unknown values.
-    pub fn from_str(arch_name: impl Into<Cow<'a, str>>) -> Self {
-        let arch_name = utils::into_ascii_lowercase(arch_name.into());
-        match arch_name.as_ref() {
-            "aarch64" => Arch::AARCH64,
-            "arm" => Arch::ARM,
-            "asmjs" => Arch::ASMJS,
-            "mips" => Arch::MIPS,
-            "mips64" => Arch::MIPS64,
-            "msp430" => Arch::MSP430,
-            "powerpc" => Arch::POWERPC,
-            "powerpc64" => Arch::POWERPC64,
-            "riscv" => Arch::RISCV,
-            "s390x" => Arch::S390X,
-            "sparc" => Arch::SPARC,
-            "sparc64" => Arch::SPARC64,
-            "thumbv6" => Arch::THUMBV6,
-            "thumbv7" => Arch::THUMBV7,
-            "wasm32" => Arch::WASM32,
-            "x86" => Arch::X86,
-            "x86_64" => Arch::X86_64,
-            _ => Arch::Other(arch_name),
-        }
-    }
-
+impl Arch<'_> {
     /// Gets the current target [`Arch`].
     pub fn target() -> Result<Self, VarError> {
         env::var("CARGO_CFG_TARGET_ARCH").map(Self::from_str)
     }
 }
 
-impl<'a> fmt::Display for Arch<'a> {
+impl fmt::Display for Arch<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(self.as_str())
     }
