@@ -25,9 +25,9 @@ fn main() {
 
         // macOS targets
         "x86_64-apple-darwin":
-            (Arch::X86_64, Endian::Little, Env::Gnu, Family::Unix, Os::MacOS, PointerWidth::U64, Vendor::Apple),
+            (Arch::X86_64, Endian::Little, Env::from_str(""), Family::Unix, Os::MacOS, PointerWidth::U64, Vendor::Apple),
         "aarch64-apple-darwin":
-            (Arch::AArch64, Endian::Little, Env::Gnu, Family::Unix, Os::MacOS, PointerWidth::U64, Vendor::Apple),
+            (Arch::AArch64, Endian::Little, Env::from_str(""), Family::Unix, Os::MacOS, PointerWidth::U64, Vendor::Apple),
     };
 
     let target = target_triple().unwrap();
