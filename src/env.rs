@@ -11,7 +11,7 @@ define_target_enum! {
     /// # Note
     /// This value is closely related to the fourth element of the platform target triple,
     /// though it is not identical. For example, embedded ABIs such as `gnueabihf` will simply
-    /// define `target_env` as `"gnu"` (i.e. [`Env::GNU`])
+    /// define `target_env` as `"gnu"` (i.e. [`Env::Gnu`])
     #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
     #[non_exhaustive]
     pub enum Env<'a> {
