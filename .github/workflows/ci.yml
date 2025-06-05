@@ -11,13 +11,24 @@ env:
   RUSTDOCFLAGS: "--deny warnings"
   RUSTFLAGS: "--deny warnings"
       
+
 jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         toolchain: ["stable", "nightly"]
-        target: ["x86_64-unknown-linux-gnu", "x86_64-pc-windows-gnu", "i686-pc-windows-msvc", "x86_64-apple-darwin"]
+        target:
+          - x86_64-unknown-linux-gnu
+          - x86_64-pc-windows-gnu
+          - i686-pc-windows-msvc
+          - x86_64-apple-darwin
+          - i686-pc-windows-gnu
+          - aarch64-unknown-linux-gnu
+          - armv7-unknown-linux-gnueabihf
+          - aarch64-apple-darwin
+          - wasm32-unknown-unknown
+          - wasm32-wasi
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
@@ -25,8 +36,31 @@ jobs:
             os: windows-latest
           - target: i686-pc-windows-msvc
             os: windows-latest
+          - target: i686-pc-windows-gnu
+            os: windows-latest
           - target: x86_64-apple-darwin
             os: macos-latest
+          - target: aarch64-apple-darwin
+            os: macos-latest
+          - target: aarch64-unknown-linux-gnu
+            os: ubuntu-latest
+          - target: armv7-unknown-linux-gnueabihf
+            os: ubuntu-latest
+          - target: wasm32-unknown-unknown
+            os: ubuntu-latest
+          - target: wasm32-wasi
+            os: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install latest ${{ matrix.toolchain }}
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.toolchain }}
+          target: ${{ matrix.target }}
+      - name: Build
+        run: cargo build --target ${{ matrix.target }}
+      - name: Test
+        run: cargo test --target ${{ matrix.target }} --all-targets
     steps:
     - uses: actions/checkout@v4
     - name: Install latest ${{ matrix.toolchain }}
