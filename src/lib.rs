@@ -38,20 +38,23 @@ pub use endian::*;
 mod env;
 pub use env::*;
 
+mod family;
+pub use family::*;
+
 mod os;
 pub use os::*;
 
 mod pointer_width;
 pub use pointer_width::*;
 
-mod family;
-pub use family::*;
+mod profile;
+pub use profile::*;
+
+mod vendor;
+pub use vendor::*;
 
 mod target;
 pub use target::*;
-
-mod profile;
-pub use profile::*;
 
 mod utils;
 
@@ -67,6 +70,10 @@ pub fn target_endian() -> Result<Endian<'static>, std::env::VarError> {
 pub fn target_env() -> Result<Env<'static>, std::env::VarError> {
     Env::target()
 }
+/// Gets the current target [`Family`]. This function is equivalent to [`Family::target()`].
+pub fn target_family() -> Result<Family<'static>, std::env::VarError> {
+    Family::target()
+}
 /// Gets the current target [`Os`]. This function is equivalent to [`Os::target()`].
 pub fn target_os() -> Result<Os<'static>, std::env::VarError> {
     Os::target()
@@ -75,9 +82,9 @@ pub fn target_os() -> Result<Os<'static>, std::env::VarError> {
 pub fn target_pointer_width() -> Result<PointerWidth<'static>, std::env::VarError> {
     PointerWidth::target()
 }
-/// Gets the current target [`Family`]. This function is equivalent to [`Family::target()`].
-pub fn target_family() -> Result<Family<'static>, std::env::VarError> {
-    Family::target()
+/// Gets the current target [`Vendor`]. This function is equivalent to [`Vendor::target()`].
+pub fn target_vendor() -> Result<Vendor<'static>, std::env::VarError> {
+    Vendor::target()
 }
 /// Gets the current target triple.
 pub fn target_triple() -> Result<String, std::env::VarError> {

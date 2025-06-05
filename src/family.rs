@@ -5,6 +5,7 @@ use std::{
 
 use crate::utils::define_target_enum;
 
+// TODO: target_family was changed to a list
 define_target_enum! {
     /// A more generic description of a target, such as the family of
     /// the operating systems or architectures that the target generally falls into.
