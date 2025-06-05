@@ -25,15 +25,9 @@ fn main() {
 
         // macOS targets
         "x86_64-apple-darwin":
-            (Arch::X86_64, Endian::Little, Env::Unknown, Family::Unix, Os::MacOS, PointerWidth::U64, Vendor::Apple),
+            (Arch::X86_64, Endian::Little, Env::Gnu, Family::Unix, Os::MacOS, PointerWidth::U64, Vendor::Apple),
         "aarch64-apple-darwin":
-            (Arch::AArch64, Endian::Little, Env::Unknown, Family::Unix, Os::MacOS, PointerWidth::U64, Vendor::Apple),
-
-        // WASM targets
-        "wasm32-unknown-unknown":
-            (Arch::Wasm32, Endian::Little, Env::Unknown, Family::Unknown, Os::Unknown, PointerWidth::U32, Vendor::Unknown),
-        "wasm32-wasi":
-            (Arch::Wasm32, Endian::Little, Env::Unknown, Family::Unknown, Os::Wasi, PointerWidth::U32, Vendor::Unknown),
+            (Arch::AArch64, Endian::Little, Env::Gnu, Family::Unix, Os::MacOS, PointerWidth::U64, Vendor::Apple),
     };
 
     let target = target_triple().unwrap();

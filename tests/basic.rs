@@ -8,11 +8,13 @@ fn test() {
         .canonicalize()
         .unwrap();
 
-    Command::new("cargo")
+    let exist_status = Command::new("cargo")
         .arg("build")
         .current_dir(&crate_path)
         .spawn()
         .unwrap()
         .wait()
         .unwrap();
+
+    assert!(exist_status.success(), "Failed to build test crate");
 }
