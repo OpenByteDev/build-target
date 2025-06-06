@@ -1,5 +1,9 @@
 #![warn(clippy::pedantic)]
-#![allow(clippy::needless_doctest_main, clippy::missing_errors_doc, clippy::should_implement_trait)]
+#![allow(
+    clippy::needless_doctest_main,
+    clippy::missing_errors_doc,
+    clippy::should_implement_trait
+)]
 
 //! A crate that provides programmatic access to information about the current build target inside `build.rs`.
 //!
