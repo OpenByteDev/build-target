@@ -36,7 +36,7 @@ impl Profile<'_> {
     }
 }
 
-impl<'a> fmt::Display for Profile<'a> {
+impl fmt::Display for Profile<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(self.as_str())
     }

@@ -23,7 +23,7 @@ pub struct Target<'a> {
     pub triple: Cow<'a, str>,
 }
 
-impl<'a> Target<'a> {
+impl Target<'_> {
     /// Gets the current build target as a [`Target`].
     pub fn current() -> Result<Self, VarError> {
         Ok(Self {

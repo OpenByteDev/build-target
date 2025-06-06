@@ -67,7 +67,7 @@ pub fn to_ascii_lowercase(s: &'_ str) -> Cow<'_, str> {
         let mut string = String::with_capacity(s.len());
         string.push_str(&s[..first_uppercase]);
         for c in s[first_uppercase..].chars() {
-            string.push(c.to_ascii_lowercase())
+            string.push(c.to_ascii_lowercase());
         }
         Cow::Owned(string)
     } else {
