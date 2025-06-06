@@ -10,7 +10,9 @@ define_target_enum! {
     #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
     #[non_exhaustive]
     pub enum Endian<'a> {
+        /// Most significant byte stored first.
         Big => "big",
+        /// Least significant byte stored first.
         Little => "little",
     }
 

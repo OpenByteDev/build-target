@@ -1,6 +1,6 @@
 use std::{borrow::Cow, env::VarError};
 
-use crate::{Arch, Endian, Env, Family, Os, PointerWidth, target_triple};
+use crate::{Arch, Endian, Env, Family, Os, PointerWidth, Vendor, target_triple};
 
 /// Combined information about a build target.
 #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
@@ -17,6 +17,8 @@ pub struct Target<'a> {
     pub pointer_width: PointerWidth<'a>,
     /// The family of the target, such as `unix`, `windows`, or `wasm`.
     pub family: Family<'a>,
+    /// The vendor of the target, such as `apple`, `unknown`, or `pc`.
+    pub vendor: Vendor<'a>,
     /// The target triple, which is a string that uniquely identifies the target.
     pub triple: Cow<'a, str>,
 }
@@ -31,6 +33,7 @@ impl<'a> Target<'a> {
             os: Os::target()?,
             pointer_width: PointerWidth::target()?,
             family: Family::target()?,
+            vendor: Vendor::target()?,
             triple: target_triple()?.into(),
         })
     }
