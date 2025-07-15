@@ -23,6 +23,12 @@ macro_rules! define_target_enum {
             Other(std::borrow::Cow<'a, str>),
         }
 
+        impl<'a> AsRef<str> for $name<'a> {
+            fn as_ref(&self) -> &str {
+                self.as_str()
+            }
+        }
+
         impl<'a> $name<'a> {
             #[must_use]
             #[doc = $as_str_doc]
