@@ -27,7 +27,7 @@ fn test_build_all_installed_targets() {
 
 fn get_installed_targets() -> Vec<String> {
     let output = Command::new("rustup")
-        .args(&["target", "list", "--installed"])
+        .args(["target", "list", "--installed"])
         .output()
         .expect("Failed to list installed targets");
 

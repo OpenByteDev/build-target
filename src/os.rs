@@ -1,9 +1,6 @@
-use std::{
-    env::{self, VarError},
-    fmt,
-};
+use std::fmt;
 
-use crate::utils::define_target_enum;
+use crate::utils::{build_env, define_target_enum};
 
 define_target_enum! {
     // adapted from target/os.rs from platforms crate
@@ -14,7 +11,7 @@ define_target_enum! {
     /// and third element of the platform target triple, though it is not identical.
     #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
     #[non_exhaustive]
-    pub enum Os<'a> {
+    pub enum Os {
         /// IBM AIX operating system
         Aix => "aix",
         /// AMD HSA architecture
@@ -105,14 +102,15 @@ define_target_enum! {
     from_str_doc = "Tries to parse the given string as an [`Os`] falling back to [`Os::Other`] for unknown values",
 }
 
-impl Os<'_> {
+impl Os {
     /// Gets the current target [`Os`].
-    pub fn target() -> Result<Self, VarError> {
-        env::var("CARGO_CFG_TARGET_OS").map(Self::from_str)
+    #[must_use]
+    pub fn target() -> Self {
+        Self::from_str(build_env("CARGO_CFG_TARGET_OS"))
     }
 }
 
-impl fmt::Display for Os<'_> {
+impl fmt::Display for Os {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(self.as_str())
     }

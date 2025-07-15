@@ -1,15 +1,12 @@
-use std::{
-    env::{self, VarError},
-    fmt,
-};
+use std::fmt;
 
-use crate::utils::define_target_enum;
+use crate::utils::{build_env, define_target_enum};
 
 define_target_enum! {
     /// The vendor of the target platform, such as the manufacturer of the hardware or the provider of the operating system.
     #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
     #[non_exhaustive]
-    pub enum Vendor<'a> {
+    pub enum Vendor {
         /// Apple Inc.
         Apple => "apple",
         /// Fortanix SGX platform
@@ -32,14 +29,15 @@ define_target_enum! {
     from_str_doc = "Tries to parse the given string as an [`Vendor`] falling back to [`Vendor::Other`] for unknown values.",
 }
 
-impl Vendor<'_> {
+impl Vendor {
     /// Gets the current target [`Vendor`].
-    pub fn target() -> Result<Self, VarError> {
-        env::var("CARGO_CFG_TARGET_VENDOR").map(Self::from_str)
+    #[must_use]
+    pub fn target() -> Self {
+        Self::from_str(build_env("CARGO_CFG_TARGET_VENDOR"))
     }
 }
 
-impl fmt::Display for Vendor<'_> {
+impl fmt::Display for Vendor {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(self.as_str())
     }

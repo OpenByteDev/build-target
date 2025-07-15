@@ -1,15 +1,12 @@
-use std::{
-    env::{self, VarError},
-    fmt,
-};
+use std::fmt;
 
-use crate::utils::define_target_enum;
+use crate::utils::{build_env, define_target_enum};
 
 define_target_enum! {
     /// The endianness of the target architecture.
     #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
     #[non_exhaustive]
-    pub enum Endian<'a> {
+    pub enum Endian {
         /// Most significant byte stored first.
         Big => "big",
         /// Least significant byte stored first.
@@ -20,14 +17,15 @@ define_target_enum! {
     from_str_doc = "Tries to parse the given string as an [`Endian`] falling back to [`Endian::Other`] for unknown values.",
 }
 
-impl Endian<'_> {
+impl Endian {
     /// Gets the current target [`Endian`].
-    pub fn target() -> Result<Self, VarError> {
-        env::var("CARGO_CFG_TARGET_ENDIAN").map(Self::from_str)
+    #[must_use]
+    pub fn target() -> Self {
+        Self::from_str(build_env("CARGO_CFG_TARGET_ENDIAN"))
     }
 }
 
-impl fmt::Display for Endian<'_> {
+impl fmt::Display for Endian {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(self.as_str())
     }

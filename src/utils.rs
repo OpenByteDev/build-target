@@ -1,9 +1,25 @@
 use std::borrow::Cow;
+use std::env;
+
+pub(crate) fn build_env_opt(name: &str) -> Option<String> {
+    match env::var(name) {
+        Ok(val) if !val.is_empty() => Some(val),
+        _ => None,
+    }
+}
+pub(crate) fn build_env(name: &str) -> String {
+    build_env_opt(name).unwrap_or_else(|| {
+        let crate_name = std::env!("CARGO_CRATE_NAME").replace('_', "-");
+        panic!(
+            "Environment variable {name} not defined, are you using {crate_name} outside of build.rs?",
+        )
+    })
+}
 
 macro_rules! define_target_enum {
     (
         $(#[$enum_meta:meta])*
-        $vis:vis enum $name:ident<'a> {
+        $vis:vis enum $name:ident {
             $(
                 $(#[$variant_meta:meta])*
                 $variant:ident => $str:literal
@@ -13,23 +29,23 @@ macro_rules! define_target_enum {
         from_str_doc = $from_str_doc:literal,
     ) => {
         $(#[$enum_meta])*
-        $vis enum $name<'a> {
+        $vis enum $name {
             $(
                 $(#[$variant_meta])*
                 #[doc = concat!("`", $str, "`")]
                 $variant,
             )+
             /// Unknown value
-            Other(std::borrow::Cow<'a, str>),
+            Other(String),
         }
 
-        impl<'a> AsRef<str> for $name<'a> {
+        impl AsRef<str> for $name {
             fn as_ref(&self) -> &str {
                 self.as_str()
             }
         }
 
-        impl<'a> $name<'a> {
+        impl $name {
             #[must_use]
             #[doc = $as_str_doc]
             pub fn as_str(&self) -> &str {
@@ -40,11 +56,11 @@ macro_rules! define_target_enum {
             }
 
             #[doc = $from_str_doc]
-            pub fn from_str(name: impl Into<std::borrow::Cow<'a, str>>) -> Self {
+            pub fn from_str<'a>(name: impl Into<std::borrow::Cow<'a, str>>) -> Self {
                 let name = crate::utils::into_ascii_lowercase(name.into());
                 match name.as_ref() {
                     $($str => Self::$variant,)+
-                    _ => Self::Other(name),
+                    _ => Self::Other(name.to_string()),
                 }
             }
         }
@@ -88,7 +104,7 @@ mod tests {
 
     #[test]
     fn basic() {
-        let test = "Some strIng WITH RaNdOm casing. unicode: ఈ⌛龜∰ēƉʞ‱";
+        let test = "Some strIng WITH RaNdOm casing. unicode: ఈ⌛龜∰ēƉʞ‱";
         let expected = test.to_ascii_lowercase();
         let actual = to_ascii_lowercase(test);
         assert_eq!(expected.as_str(), actual.as_ref());
@@ -96,7 +112,7 @@ mod tests {
 
     #[test]
     fn no_alloc_on_lowercase() {
-        let test = "some lowercase string. unicode: ఈ⌛龜∰ēƉʞ‱";
+        let test = "some lowercase string. unicode: ఈ⌛龜∰ēƉʞ‱";
         let expected = test.to_ascii_lowercase();
         let actual = to_ascii_lowercase(test);
         assert!(matches!(actual, Cow::Borrowed(_)));

@@ -1,14 +1,11 @@
-use crate::utils::define_target_enum;
-use std::{
-    env::{self, VarError},
-    fmt,
-};
+use crate::utils::{build_env, define_target_enum};
+use std::fmt;
 
 define_target_enum! {
     /// Target CPU architecture
     #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
     #[non_exhaustive]
-    pub enum Arch<'a> {
+    pub enum Arch {
         /// ARMv8 64-bit architecture
         AArch64 => "aarch64",
         /// AMD GPU architecture
@@ -49,7 +46,7 @@ define_target_enum! {
         Riscv32 => "riscv32",
         /// 64-bit RISC-V architecture
         Riscv64 => "riscv64",
-        /// 64-bit IBM z/Architecture mainframe CPU
+        /// 64-bit IBM mainframe architecture
         S390X => "s390x",
         /// 32-bit SPARC CPU architecture
         Sparc => "sparc",
@@ -71,14 +68,15 @@ define_target_enum! {
     from_str_doc = "Tries to parse the given string as an [`Arch`] falling back to [`Arch::Other`] for unknown values.",
 }
 
-impl Arch<'_> {
+impl Arch {
     /// Gets the current target [`Arch`].
-    pub fn target() -> Result<Self, VarError> {
-        env::var("CARGO_CFG_TARGET_ARCH").map(Self::from_str)
+    #[must_use]
+    pub fn target() -> Self {
+        Self::from_str(build_env("CARGO_CFG_TARGET_ARCH"))
     }
 }
 
-impl fmt::Display for Arch<'_> {
+impl fmt::Display for Arch {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(self.as_str())
     }

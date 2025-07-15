@@ -1,15 +1,12 @@
-use std::{
-    env::{self, VarError},
-    fmt,
-};
+use std::fmt;
 
-use crate::utils::define_target_enum;
+use crate::utils::{build_env, define_target_enum};
 
 define_target_enum! {
     /// Profile of the current build.
     #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
     #[non_exhaustive]
-    pub enum Profile<'a> {
+    pub enum Profile {
         /// The dev profile is used for normal development and debugging.
         /// It is the default for build commands like `cargo build`.
         Dev => "dev",
@@ -29,14 +26,15 @@ define_target_enum! {
     from_str_doc = "Tries to parse the given string as an [`Profile`] falling back to [`Profile::Other`] for unknown values.",
 }
 
-impl Profile<'_> {
+impl Profile {
     /// Gets the current [`Profile`].
-    pub fn current() -> Result<Self, VarError> {
-        env::var("PROFILE").map(Self::from_str)
+    #[must_use]
+    pub fn current() -> Self {
+        Self::from_str(build_env("PROFILE"))
     }
 }
 
-impl fmt::Display for Profile<'_> {
+impl fmt::Display for Profile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(self.as_str())
     }

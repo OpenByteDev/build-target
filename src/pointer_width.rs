@@ -1,16 +1,12 @@
-use std::{
-    env::{self, VarError},
-    fmt,
-    num::ParseIntError,
-};
+use std::{fmt, num::ParseIntError};
 
-use crate::utils::define_target_enum;
+use crate::utils::{build_env, define_target_enum};
 
 define_target_enum! {
     /// The endianness of the target architecture.
     #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
     #[non_exhaustive]
-    pub enum PointerWidth<'a> {
+    pub enum PointerWidth {
         /// 16-bit pointer width.
         U16 => "16",
         /// 32-bit pointer width.
@@ -23,34 +19,35 @@ define_target_enum! {
     from_str_doc = "Tries to parse the given string as a [`PointerWidth`] falling back to [`PointerWidth::Other`] for unknown values.",
 }
 
-impl PointerWidth<'_> {
+impl PointerWidth {
     /// Gets the current target [`PointerWidth`].
-    pub fn target() -> Result<Self, VarError> {
-        env::var("CARGO_CFG_TARGET_POINTER_WIDTH").map(Self::from_str)
+    #[must_use]
+    pub fn target() -> Self {
+        Self::from_str(build_env("CARGO_CFG_TARGET_POINTER_WIDTH"))
     }
 }
 
-impl fmt::Display for PointerWidth<'_> {
+impl fmt::Display for PointerWidth {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(self.as_str())
     }
 }
 
-impl From<u8> for PointerWidth<'_> {
+impl From<u8> for PointerWidth {
     fn from(value: u8) -> Self {
         match value {
             64 => PointerWidth::U64,
             32 => PointerWidth::U32,
             16 => PointerWidth::U16,
-            _ => PointerWidth::Other(value.to_string().into()),
+            _ => PointerWidth::Other(value.to_string()),
         }
     }
 }
 
-impl TryFrom<PointerWidth<'_>> for u8 {
+impl TryFrom<PointerWidth> for u8 {
     type Error = ParseIntError;
 
-    fn try_from(value: PointerWidth<'_>) -> Result<Self, Self::Error> {
+    fn try_from(value: PointerWidth) -> Result<Self, Self::Error> {
         match value {
             PointerWidth::U64 => Ok(64),
             PointerWidth::U32 => Ok(32),

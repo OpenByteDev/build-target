@@ -1,8 +1,5 @@
-use crate::utils::define_target_enum;
-use std::{
-    env::{self, VarError},
-    fmt,
-};
+use crate::utils::{build_env_opt, define_target_enum};
+use std::fmt;
 
 define_target_enum! {
     // adapted from target/env.rs from platforms crate
@@ -14,7 +11,7 @@ define_target_enum! {
     /// define `target_env` as `"gnu"` (i.e. [`Env::Gnu`])
     #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
     #[non_exhaustive]
-    pub enum Env<'a> {
+    pub enum Env {
         /// The GNU C Library (glibc)
         Gnu => "gnu",
         /// Microsoft Visual C(++)
@@ -47,14 +44,15 @@ define_target_enum! {
     from_str_doc = "Tries to parse the given string as an [`Env`] falling back to [`Env::Other`] for unknown values.",
 }
 
-impl Env<'_> {
+impl Env {
     /// Gets the current target [`Env`].
-    pub fn target() -> Result<Self, VarError> {
-        env::var("CARGO_CFG_TARGET_ENV").map(Self::from_str)
+    #[must_use]
+    pub fn target() -> Option<Self> {
+        build_env_opt("CARGO_CFG_TARGET_ENV").map(Self::from_str)
     }
 }
 
-impl fmt::Display for Env<'_> {
+impl fmt::Display for Env {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(self.as_str())
     }

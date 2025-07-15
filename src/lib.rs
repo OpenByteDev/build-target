@@ -16,7 +16,7 @@
 //! fn main() {
 //!     // The panic is just used to print the information to the console.
 //!     panic!("current build target: {:#?}",
-//!         build_target::target().unwrap()
+//!         build_target::target()
 //!     );
 //! }
 //! ```
@@ -26,14 +26,14 @@
 //! // inside build.rs
 //!
 //! fn main() {
-//!     let arch   = build_target::target_arch().unwrap();   // eg. "x86_64", "aarch64", ...
-//!     let endian = build_target::target_endian().unwrap(); // eg. "big", "little", ...
-//!     let env    = build_target::target_env().unwrap();    // eg. "gnu", "msvc", ...
-//!     let family = build_target::target_family().unwrap(); // eg. "windows", "unix", ...
-//!     let pw     = build_target::target_pointer_width().unwrap(); // eg. "32", "64", ...
-//!     let os     = build_target::target_os().unwrap();     // eg. "android", "linux", ...
-//!     let vendor = build_target::target_vendor().unwrap(); // eg. "apple", "unknown", ...
-//!     let triple = build_target::target_triple().unwrap(); // eg. "x86_64-unknown-linux-gnu", ...
+//!     let arch   = build_target::target_arch();   // eg. "x86_64", "aarch64", ...
+//!     let endian = build_target::target_endian(); // eg. "big", "little", ...
+//!     let env    = build_target::target_env();    // eg. "gnu", "msvc", ...
+//!     let family = build_target::target_family(); // eg. "windows", "unix", ...
+//!     let pw     = build_target::target_pointer_width(); // eg. "32", "64", ...
+//!     let os     = build_target::target_os();     // eg. "android", "linux", ...
+//!     let vendor = build_target::target_vendor(); // eg. "apple", "unknown", ...
+//!     let triple = build_target::target_triple(); // eg. "x86_64-unknown-linux-gnu", ...
 //! }
 //! ```
 
@@ -64,41 +64,52 @@ pub use vendor::*;
 mod target;
 pub use target::*;
 
+use crate::utils::build_env;
+
 mod utils;
 
 /// Gets the current target [`Arch`]. This function is equivalent to [`Arch::target()`].
-pub fn target_arch() -> Result<Arch<'static>, std::env::VarError> {
+#[must_use]
+pub fn target_arch() -> Arch {
     Arch::target()
 }
 /// Gets the current target [`Endian`]. This function is equivalent to [`Endian::target()`].
-pub fn target_endian() -> Result<Endian<'static>, std::env::VarError> {
+#[must_use]
+pub fn target_endian() -> Endian {
     Endian::target()
 }
 /// Gets the current target [`Env`]. This function is equivalent to [`Env::target()`].
-pub fn target_env() -> Result<Env<'static>, std::env::VarError> {
+#[must_use]
+pub fn target_env() -> Option<Env> {
     Env::target()
 }
-/// Gets the current target [`Family`]. This function is equivalent to [`Family::target()`].
-pub fn target_family() -> Result<Vec<Family<'static>>, std::env::VarError> {
+/// Gets the current target [`Family`]s. This function is equivalent to [`Family::target()`].
+#[must_use]
+pub fn target_family() -> Vec<Family> {
     Family::target()
 }
 /// Gets the current target [`Os`]. This function is equivalent to [`Os::target()`].
-pub fn target_os() -> Result<Os<'static>, std::env::VarError> {
+#[must_use]
+pub fn target_os() -> Os {
     Os::target()
 }
 /// Gets the current target [`PointerWidth`]. This function is equivalent to [`PointerWidth::target()`].
-pub fn target_pointer_width() -> Result<PointerWidth<'static>, std::env::VarError> {
+#[must_use]
+pub fn target_pointer_width() -> PointerWidth {
     PointerWidth::target()
 }
 /// Gets the current target [`Vendor`]. This function is equivalent to [`Vendor::target()`].
-pub fn target_vendor() -> Result<Vendor<'static>, std::env::VarError> {
+#[must_use]
+pub fn target_vendor() -> Vendor {
     Vendor::target()
 }
 /// Gets the current target triple.
-pub fn target_triple() -> Result<String, std::env::VarError> {
-    std::env::var("TARGET")
+#[must_use]
+pub fn target_triple() -> String {
+    build_env("TARGET")
 }
 /// Gets the current target information as a [`Target`]. This function is equivalent to [`Target::current()`].
-pub fn target() -> Result<Target<'static>, std::env::VarError> {
+#[must_use]
+pub fn target() -> Target {
     Target::current()
 }

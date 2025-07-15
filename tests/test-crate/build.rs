@@ -1,6 +1,5 @@
 use build_target::{target_triple, Target, Arch, Endian, Env, Family, Os, PointerWidth, Vendor};
 use velcro::hash_map;
-use std::borrow::Cow;
 
 macro_rules! p {
     ($($tokens: tt)*) => {
@@ -14,143 +13,143 @@ fn main() {
         "i686-pc-windows-msvc": Target {
             arch: Arch::X86,
             endian: Endian::Little,
-            env: Env::Msvc,
+            env: Some(Env::Msvc),
             family: vec![Family::Windows],
             os: Os::Windows,
             pointer_width: PointerWidth::U32,
             vendor: Vendor::Pc,
-            triple: Cow::from("i686-pc-windows-msvc"),
+            triple: "i686-pc-windows-msvc".to_string(),
         },
         "i686-pc-windows-gnu": Target {
             arch: Arch::X86,
             endian: Endian::Little,
-            env: Env::Gnu,
+            env: Some(Env::Gnu),
             family: vec![Family::Windows],
             os: Os::Windows,
             pointer_width: PointerWidth::U32,
             vendor: Vendor::Pc,
-            triple: Cow::from("i686-pc-windows-gnu"),
+            triple: "i686-pc-windows-gnu".to_string(),
         },
         "x86_64-pc-windows-msvc": Target {
             arch: Arch::X86_64,
             endian: Endian::Little,
-            env: Env::Msvc,
+            env: Some(Env::Msvc),
             family: vec![Family::Windows],
             os: Os::Windows,
             pointer_width: PointerWidth::U64,
             vendor: Vendor::Pc,
-            triple: Cow::from("x86_64-pc-windows-msvc"),
+            triple: "x86_64-pc-windows-msvc".to_string(),
         },
         "x86_64-pc-windows-gnu": Target {
             arch: Arch::X86_64,
             endian: Endian::Little,
-            env: Env::Gnu,
+            env: Some(Env::Gnu),
             family: vec![Family::Windows],
             os: Os::Windows,
             pointer_width: PointerWidth::U64,
             vendor: Vendor::Pc,
-            triple: Cow::from("x86_64-pc-windows-gnu"),
+            triple: "x86_64-pc-windows-gnu".to_string(),
         },
 
         // Linux targets
         "x86_64-unknown-linux-gnu": Target {
             arch: Arch::X86_64,
             endian: Endian::Little,
-            env: Env::Gnu,
+            env: Some(Env::Gnu),
             family: vec![Family::Unix],
             os: Os::Linux,
             pointer_width: PointerWidth::U64,
             vendor: Vendor::Unknown,
-            triple: Cow::from("x86_64-unknown-linux-gnu"),
+            triple: "x86_64-unknown-linux-gnu".to_string(),
         },
         "x86_64-unknown-linux-musl": Target {
             arch: Arch::X86_64,
             endian: Endian::Little,
-            env: Env::Musl,
+            env: Some(Env::Musl),
             family: vec![Family::Unix],
             os: Os::Linux,
             pointer_width: PointerWidth::U64,
             vendor: Vendor::Unknown,
-            triple: Cow::from("x86_64-unknown-linux-musl"),
+            triple: "x86_64-unknown-linux-musl".to_string(),
         },
         "aarch64-unknown-linux-gnu": Target {
             arch: Arch::AArch64,
             endian: Endian::Little,
-            env: Env::Gnu,
+            env: Some(Env::Gnu),
             family: vec![Family::Unix],
             os: Os::Linux,
             pointer_width: PointerWidth::U64,
             vendor: Vendor::Unknown,
-            triple: Cow::from("aarch64-unknown-linux-gnu"),
+            triple: "aarch64-unknown-linux-gnu".to_string(),
         },
         "armv7-unknown-linux-gnueabihf": Target {
             arch: Arch::Arm,
             endian: Endian::Little,
-            env: Env::Gnu,
+            env: Some(Env::Gnu),
             family: vec![Family::Unix],
             os: Os::Linux,
             pointer_width: PointerWidth::U32,
             vendor: Vendor::Unknown,
-            triple: Cow::from("armv7-unknown-linux-gnueabihf"),
+            triple: "armv7-unknown-linux-gnueabihf".to_string(),
         },
 
         // macOS targets
         "x86_64-apple-darwin": Target {
             arch: Arch::X86_64,
             endian: Endian::Little,
-            env: Env::from_str(""),
+            env: None,
             family: vec![Family::Unix],
             os: Os::MacOS,
             pointer_width: PointerWidth::U64,
             vendor: Vendor::Apple,
-            triple: Cow::from("x86_64-apple-darwin"),
+            triple: "x86_64-apple-darwin".to_string(),
         },
         "aarch64-apple-darwin": Target {
             arch: Arch::AArch64,
             endian: Endian::Little,
-            env: Env::from_str(""),
+            env: None,
             family: vec![Family::Unix],
             os: Os::MacOS,
             pointer_width: PointerWidth::U64,
             vendor: Vendor::Apple,
-            triple: Cow::from("aarch64-apple-darwin"),
+            triple: "aarch64-apple-darwin".to_string(),
         },
 
         // Others
         "riscv32imac-unknown-none-elf": Target {
             arch: Arch::Riscv32,
             endian: Endian::Little,
-            env: Env::from_str(""),
+            env: None,
             family: vec![],
             os: Os::None,
             pointer_width: PointerWidth::U32,
             vendor: Vendor::Unknown,
-            triple: Cow::from("riscv32imac-unknown-none-elf"),
+            triple: "riscv32imac-unknown-none-elf".to_string(),
         },
         "thumbv7m-none-eabi": Target {
             arch: Arch::Arm,
             endian: Endian::Little,
-            env: Env::from_str(""),
+            env: None,
             family: vec![],
             os: Os::None,
             pointer_width: PointerWidth::U32,
             vendor: Vendor::Unknown,
-            triple: Cow::from("thumbv7m-none-eabi"),
+            triple: "thumbv7m-none-eabi".to_string(),
         },
         "wasm32-unknown-emscripten": Target {
             arch: Arch::Wasm32,
             endian: Endian::Little,
-            env: Env::from_str(""),
+            env: None,
             family: vec![Family::Unix, Family::Wasm],
             os: Os::Emscripten,
             pointer_width: PointerWidth::U32,
             vendor: Vendor::Unknown,
-            triple: Cow::from("wasm32-unknown-emscripten"),
+            triple: "wasm32-unknown-emscripten".to_string(),
         },
     };
 
-    let target_str = target_triple().unwrap();
-    let target = Target::current().unwrap();
+    let target_str = target_triple();
+    let target = Target::current();
 
     p!("{}", target_str);
     p!("{:?}", target);
