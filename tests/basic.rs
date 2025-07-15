@@ -21,10 +21,7 @@ fn test_build_all_installed_targets() {
             .status()
             .expect("Failed to run cargo");
 
-        assert!(
-            status.success(),
-            "❌ Build failed for target: {target}"
-        );
+        assert!(status.success(), "❌ Build failed for target: {target}");
     }
 }
 
