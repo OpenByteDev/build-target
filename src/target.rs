@@ -16,7 +16,7 @@ pub struct Target<'a> {
     /// The pointer width of the target, such as `32` or `64`.
     pub pointer_width: PointerWidth<'a>,
     /// The family of the target, such as `unix`, `windows`, or `wasm`.
-    pub family: Family<'a>,
+    pub family: Vec<Family<'a>>,
     /// The vendor of the target, such as `apple`, `unknown`, or `pc`.
     pub vendor: Vendor<'a>,
     /// The target triple, which is a string that uniquely identifies the target.
@@ -32,7 +32,7 @@ impl Target<'_> {
             env: Env::target()?,
             os: Os::target()?,
             pointer_width: PointerWidth::target()?,
-            family: Family::target()?,
+            family: Family::target().unwrap_or_default(),
             vendor: Vendor::target()?,
             triple: target_triple()?.into(),
         })

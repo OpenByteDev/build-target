@@ -26,8 +26,10 @@ define_target_enum! {
 
 impl Family<'_> {
     /// Gets the current target [`Family`].
-    pub fn target() -> Result<Self, VarError> {
-        env::var("CARGO_CFG_TARGET_FAMILY").map(Self::from_str)
+    pub fn target() -> Result<Vec<Self>, VarError> {
+        env::var("CARGO_CFG_TARGET_FAMILY").map(|str| {
+            str.split(',').into_iter().map(|s| Self::from_str(s.to_owned())).collect()
+        })
     }
 }
 

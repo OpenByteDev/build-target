@@ -79,7 +79,7 @@ pub fn target_env() -> Result<Env<'static>, std::env::VarError> {
     Env::target()
 }
 /// Gets the current target [`Family`]. This function is equivalent to [`Family::target()`].
-pub fn target_family() -> Result<Family<'static>, std::env::VarError> {
+pub fn target_family() -> Result<Vec<Family<'static>>, std::env::VarError> {
     Family::target()
 }
 /// Gets the current target [`Os`]. This function is equivalent to [`Os::target()`].
