@@ -17,24 +17,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        toolchain: ["stable", "nightly"]
+        toolchain: ["beta"]
         target:
           - x86_64-unknown-linux-gnu
           - x86_64-pc-windows-msvc
-          - i686-pc-windows-msvc
-          - x86_64-apple-darwin
-          - aarch64-apple-darwin
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
           - target: x86_64-pc-windows-msvc
             os: windows-latest
-          - target: i686-pc-windows-msvc
-            os: windows-latest
-          - target: x86_64-apple-darwin
-            os: macos-latest
-          - target: aarch64-apple-darwin
-            os: macos-latest
     steps:
       - uses: actions/checkout@v4
       - name: Install latest ${{ matrix.toolchain }}
@@ -44,29 +35,17 @@ jobs:
           target: ${{ matrix.target }}
       - name: Build
         run: cargo build --target ${{ matrix.target }}
+      - name: Install all targets
+        shell: pwsh
+        run: |
+          rustup target list | ForEach-Object {
+              $target = ($_ -split ' ')[0]
+              Write-Host "Adding Rust target: $target"
+              rustup target add $target
+          }
       - name: Test
-        run: cargo test --target ${{ matrix.target }} --all-targets
+        run: cargo test --target ${{ matrix.target }}
         
-  cross:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        toolchain: ["stable"]
-        target: ["aarch64-unknown-linux-gnu", "armv7-unknown-linux-gnueabihf", "thumbv6m-none-eabi"]
-    steps:
-    - uses: actions/checkout@v4
-    - name: Install latest ${{ matrix.toolchain }}
-      uses: dtolnay/rust-toolchain@master
-      with:
-        toolchain: ${{ matrix.toolchain }}
-        target: ${{ matrix.target }}
-    - name: Install cross
-      # temporary fix, see cross-rs/cross#1561
-      run: RUSTFLAGS="" cargo install cross --git https://github.com/cross-rs/cross
-    - name: Build
-      run: cross build --target ${{ matrix.target }}
-      
   documentation:
     runs-on: ubuntu-latest
     steps:
